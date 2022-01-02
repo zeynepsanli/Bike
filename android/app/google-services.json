@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "190928847058",
+    "project_id": "bikemap-f9ecc",
+    "storage_bucket": "bikemap-f9ecc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190928847058:android:d585eaadacb51a0e496d0b",
+        "android_client_info": {
+          "package_name": "com.bikemap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "190928847058-jkrlamlliqb5326ktla6mbfounb044ij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC94msk4vAsH3mDtLyRlYuOq7kfV0sOk_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "190928847058-jkrlamlliqb5326ktla6mbfounb044ij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
