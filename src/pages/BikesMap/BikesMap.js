@@ -1,29 +1,50 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { SafeAreaView, View } from 'react-native'
-import MapView from 'react-native-maps';
+
+import styles from './BikesMap.style';
+import MapView, { Marker } from 'react-native-maps';
 import database from '@react-native-firebase/database';
 
 const BikesMap = () => {
-    async function fetchBikes(params) {
-        const bikes = await database().ref().once('value');
-        console.log(bikes.val());
+    const [bikes, setBikes] = useState([]);
+
+    async function listenBikeChanges() {
+        database()
+            .ref('/bikes')
+            .on('value', snapshot => {
+                const bikeData = snapshot.val();
+                const parsedBikeData = Object.keys(bikeData).map(k => ({
+                    id: k,
+                    ...bikeData[k],
+                }));
+                setBikes(parsedBikeData);
+            });
     }
 
     useEffect(() => {
-        fetchBikes();
+        listenBikeChanges();
     }, []);
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={styles.container}>
             <MapView
-                style={{ flex: 0.5 }}
+                style={styles.map_container}
                 initialRegion={{
-                    latitude: 41.01384,
-                    longitude: 28.94966,
-                    latitudeDelta: 0.04,
-                    longitudeDelta: 0.05,
+                    latitude: 40.24987,
+                    longitude: 33.86724,
+                    latitudeDelta: 9.55648,
+                    longitudeDelta: 1.0032,
                 }}
-            />
+            >
+                {bikes.map(b => (
+                    <Marker
+                        key={b.id}
+                        coordinate={{
+                            latitude: b.latitude,
+                            longitude: b.longitude,
+                        }} />
+                ))}
+            </MapView>
         </SafeAreaView>
     );
 }
