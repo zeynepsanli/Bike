@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import styles from './BikeMarker.style';
 
-export default function BikeMarker({ data }) {
+export default function BikeMarker({ data, onSelect }) {
     const { latitude, longitude, inUse } = data;
 
     const themeColor = inUse ? 'red' : 'blue';
@@ -15,9 +15,10 @@ export default function BikeMarker({ data }) {
             coordinate={{
                 latitude,
                 longitude,
-            }}>
+            }}
+            onPress={onSelect}>
             <View style={[styles.container, { borderColor: themeColor }]}>
-                <Icon name="bike-fast" size={20} color={themeColor} />
+                <Icon name="bike" size={20} color={themeColor} />
             </View>
         </Marker>
     );

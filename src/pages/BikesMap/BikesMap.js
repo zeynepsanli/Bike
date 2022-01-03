@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView, View } from 'react-native'
+import auth from '@react-native-firebase/auth';
 
 import styles from './BikesMap.style';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 import database from '@react-native-firebase/database';
 import BikeMarker from '../../components/BikeMarker/BikeMarker';
+import BikeModal from '../../components/BikeModal/BikeModal';
 
 const BikesMap = () => {
     const [bikes, setBikes] = useState([]);
+    const [selectedBike, setSelectedBike] = useState(null);
 
     async function listenBikeChanges() {
         database()
@@ -21,6 +24,44 @@ const BikesMap = () => {
                 setBikes(parsedBikeData);
             });
     }
+
+    async function handleRent() {
+        try {
+            const { id, ...bikeData } = selectedBike;
+
+            await database()
+                .ref('/bikes/' + selectedBike.id)
+                .update({
+                    ...bikeData,
+                    inUse: 1,
+                });
+
+            await database()
+                .ref('/user/' + auth().currentUser.uid + '/currentSelectedBike')
+                .push()
+                .set(selectedBike);
+
+            setSelectedBike(null);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function handleGiveAway() {
+        const { id, ...bikeData } = selectedBike;
+
+        // Kullanıcının mevcut olarak kiraladığı bisikleti alt yapıda saklamak
+        // Kullanıcının geçmiş bisiklet kullanınımı saklamak
+        await database()
+            .ref('/bikes/' + selectedBike.id)
+            .update({
+                ...bikeData,
+                inUse: 0,
+            });
+
+        setSelectedBike(null);
+    }
+
 
     useEffect(() => {
         listenBikeChanges();
@@ -38,9 +79,10 @@ const BikesMap = () => {
                 }}
             >
                 {bikes.map(b => (
-                    <BikeMarker key={b.id} data={b} />
+                    <BikeMarker key={b.id} data={b} onSelect={() => setSelectedBike(b)} />
                 ))}
             </MapView>
+            <BikeModal bike={selectedBike} onCloseRequest={() => setSelectedBike(null)} onRent={handleRent} onGiveAway={handleGiveAway} />
         </SafeAreaView>
     );
 }
