@@ -4,6 +4,7 @@ import { SafeAreaView, View } from 'react-native'
 import styles from './BikesMap.style';
 import MapView, { Marker } from 'react-native-maps';
 import database from '@react-native-firebase/database';
+import BikeMarker from '../../components/BikeMarker/BikeMarker';
 
 const BikesMap = () => {
     const [bikes, setBikes] = useState([]);
@@ -37,12 +38,7 @@ const BikesMap = () => {
                 }}
             >
                 {bikes.map(b => (
-                    <Marker
-                        key={b.id}
-                        coordinate={{
-                            latitude: b.latitude,
-                            longitude: b.longitude,
-                        }} />
+                    <BikeMarker key={b.id} data={b} />
                 ))}
             </MapView>
         </SafeAreaView>
