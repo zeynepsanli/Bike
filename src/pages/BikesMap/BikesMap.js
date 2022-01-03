@@ -7,6 +7,7 @@ import MapView from 'react-native-maps';
 import database from '@react-native-firebase/database';
 import BikeMarker from '../../components/BikeMarker/BikeMarker';
 import BikeModal from '../../components/BikeModal/BikeModal';
+import Button from '../../components/Button/Button';
 
 const BikesMap = () => {
     const [bikes, setBikes] = useState([]);
@@ -83,6 +84,7 @@ const BikesMap = () => {
                 ))}
             </MapView>
             <BikeModal bike={selectedBike} onCloseRequest={() => setSelectedBike(null)} onRent={handleRent} onGiveAway={handleGiveAway} />
+            <Button label="Log Out" onPress={() => auth().signOut()} />
         </SafeAreaView>
     );
 }
